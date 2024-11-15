@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Extraction</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>PDF Text Extraction</h1>
+    </header>
+    <main>
+        <h2>Welcome!</h2>
+        <p>Upload your PDF to extract text.</p>
+        <!-- Link to the Upload PDF page -->
+        <a href="{% url 'upload_pdf' %}">Upload PDF</a>
+    </main>
+</body>
+</html>

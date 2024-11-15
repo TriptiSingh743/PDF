@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Upload PDF for Extraction</h1>
+    </header>
+    <main>
+        <!-- Form for PDF upload -->
+        <form id="uploadForm" action="{% url 'upload_pdf' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="pdf">Choose PDF File:</label>
+            <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+            <button type="submit">Upload PDF</button>
+        </form>
+
+        <!-- Area to display extraction result -->
+        <div id="response"></div>
+    </main>
+
+    <script>
+        // Handle form submission via JavaScript
+        const form = document.getElementById('uploadForm');
+        const responseDiv = document.getElementById('response');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            
+            if (result.extracted_text) {
+                // Redirect to the result page and pass the extracted text as a query parameter
+                window.location.href = `{% url 'display_extracted_text' %}?text=${encodeURIComponent(result.extracted_text)}`;
+            } else {
+                responseDiv.innerHTML = `<p>Error: ${result.error || 'No extracted text available'}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
